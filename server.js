@@ -68,19 +68,21 @@ function gateKeeper(req, res, next) {
   let parsedInput = queryString.parse(req.get('x-username-and-password'));
   console.log(parsedInput);
   let {user: userInput, pass: passInput} = parsedInput;
-  console.log('UN Input:', userInput, 'PW Input:', passInput);
+  console.log('un input:', userInput, 'pw input:', passInput);
   
   // find userInfo in USERS array and compare input un & pw 
-  let userInfo = USERS.find(user => user.userName === userInput);
+  let userInfo = USERS.find(user => user.userName === userInput && user.password == passInput);
   console.log('Found user info:', userInfo)
-  
-  if (userInfo && userInfo.userName == userInput && userInfo.password == passInput) {
+
+  if (userInfo) {
     console.log('login is valid');
     req.user = userInfo;
   } else {
     console.log('login is invalid');
     req.user = undefined;
   }
+  
+  console.log('assigned user info to req as:',req.user)
   
   next();
 }
